@@ -27,12 +27,36 @@ filtered_df = df[(df['Size'] >= 50000) & (df['Size'] <= 100000)]
 # Export filtered markers as CSV
 filtered_df.to_csv('filtered_markers.csv', index=False)
 
+from docx import Document
+# Create a new Word document
+doc = Document()
+
+# Add a table to the document
+table = doc.add_table(rows=1, cols=len(filtered_df.columns))
+
+# Write the column names
+for i, column in enumerate(filtered_df.columns):
+    table.cell(0, i).text = column
+
+# Write the data rows
+for _, row in filtered_df.iterrows():
+    table.add_row()
+    for i, value in enumerate(row):
+        table.cell(-1, i).text = str(value)
+
+# Save the document as a docx file
+doc.save('filtered_markers.docx')
+
+
 # Visualize the results
 plt.scatter(filtered_df['Start'], filtered_df['End'])
 plt.xlabel('Start')
 plt.ylabel('End')
 plt.title('Filtered Markers')
 plt.show()
+
+
+
 
 
 # Visualize the results
