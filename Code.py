@@ -85,3 +85,31 @@ plt.ylabel('Count')
 plt.title('Filtered Markers by Chromosome')
 plt.xticks(chromosomes)
 plt.show()
+
+
+
+
+
+
+import pandas as pd
+
+# Read the CSV file
+df = pd.read_csv('marker.csv')
+
+# Count the total number of markers
+total_markers = df.shape[0]
+
+# Count the number of markers on each chromosome
+markers_per_chromosome = df['Chromosome'].value_counts().sort_index()
+
+# Filter markers with size between 100000 and 300000
+filtered_markers = df[(df['Size'] >= 100000) & (df['Size'] <= 300000)]
+
+# Export the results as a new CSV file
+results = pd.DataFrame({
+    'Total Markers': [total_markers],
+    'Markers per Chromosome': markers_per_chromosome.values
+}, index=markers_per_chromosome.index)
+
+filtered_markers.to_csv('filtered_markers.csv', index=False)
+results.to_csv('summary.csv', index=False)
